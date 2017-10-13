@@ -32,6 +32,9 @@ driver = 'mysql+mysqlconnector://root:123456@localhost:3306/test'
 engine = create_engine('mysql+mysqlconnector://root:123456@localhost:3306/test?charset=utf8' , echo = True)
 #自动生成表格
 Base.metadata.create_all(engine)
+
+
+
 #创建DBSession 类型
 #================插入数据===============
 '''DBSession = sessionmaker(bind = engine)
@@ -48,6 +51,23 @@ sesison.close()
 print "session关闭...."'''
 #=====================================
 
+#================批量插入==============
+
+'''ids = ["6","7","8","9"]
+names = ["qiang" , "hehe" , "haha" , "brother"]
+DBSession = sessionmaker(bind = engine)
+session = DBSession()
+bookList = []
+for i in range(len(ids)):
+    book = Book(id=ids[i] , name=names[i])
+    bookList.append(book)
+session.add_all(bookList)
+session.commit()
+session.close()'''
+
+#=====================================
+
+
 # 查询
 '''session = DBSession()
 # 创建Query查询, filter是where条件, 最后调用one()返回唯一行, 如果调用all()则返回所有行.
@@ -55,5 +75,31 @@ users = session.query(Users).filter(Users.id=='1').one()
 print('type:', type(users))
 print('username:', users.username)
 session.close()'''
+
+#查询book
+'''
+DBSession = sessionmaker(bind = engine)
+session = DBSession()
+book_six = session.query(Book).filter(Book.id == '6').one()
+print ("type:" , type(book_six))
+print ("bookname:" , book_six.name)'''
+
+#删除行记录
+
+'''DBSession = sessionmaker(bind = engine)
+session = DBSession()
+useless_book = session.query(Book).filter(Book.id == '7').one()
+session.delete(useless_book)
+session.commit()
+session.close()
+print "删除成功...."'''
+
+#修改记录
+
+'''DBSession = sessionmaker(bind = engine)
+session = DBSession()
+kun_brother = session.query(Book).filter(Book.id == '6').one()
+kun_brother.name = '昆哥'
+session.commit()'''
 
 
